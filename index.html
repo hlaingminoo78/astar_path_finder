@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>A* Path Finder</title>
+</head>
+
+
+<body>
+    <main class="container">
+        <h2 class="title">A* Path Finder</h2>
+        <canvas id="canvas" width="300" height="300">
+            Your browser does not support canvas!
+        </canvas>
+        <div class="container_control">
+            <div>Total Search = <span id="looping_count"></span></div>
+            <div class="distance">
+                <input id="manhattan_distance" type="radio" name="distance" />
+                <label for="manhattan_distance">Manhattan</label>
+                <input id="euclidean_distance" type="radio" name="distance" checked />
+                <label for="euclidean_distance">Euclidean Distance</label>
+            </div>
+            <div class="wall">
+                <label for="wall_threshold">Wall Threshold : </label>
+                <input id="wall_threshold" type="range" min="5" max="40" step="5" value="15" />
+            </div>
+            <div class="count">
+                <label for="grid_count">Grid Count : </label>
+                <input id="grid_count" type="range" min="10" max="40" step="5" value="20" />
+            </div>
+            <div class="container_buttons">
+                <input id="start_button" type="button" value="Start" />
+                <input id="stop_button" type="button" value="Pause" />
+                <input id="restart_button" type="button" value="Restart" />
+                <input id="choose_start_stop" type="button" value="Choose Nodes" />
+            </div>
+        </div>
+    </main>
+    <script src="./Node.js"></script>
+    <script src="./main.js"></script>
+</body>
+
+</html>
