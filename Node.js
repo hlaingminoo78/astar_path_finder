@@ -16,10 +16,9 @@ function Node(x, y, blockProbability) {
   // -function to show a grid
   this.show = function (color) {
     c.fillStyle = this.wall ? "BLACK" : color;
-    c.strokeStyle = "BLACK";
     c.fillRect(this.x * gridSize, this.y * gridSize, gridSize, gridSize);
     c.strokeStyle = "BLACK";
-    c.lineWidth = 0.2;
+    c.lineWidth = 0.05;
     c.strokeRect(this.x * gridSize, this.y * gridSize, gridSize, gridSize);
   };
 

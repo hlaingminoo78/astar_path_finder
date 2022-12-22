@@ -3,7 +3,7 @@ let animationFrame = null;
 let canvas = document.getElementById("canvas");
 let c = canvas.getContext("2d");
 let gridCount, gridSize;
-let openList, closedList, solutionPath;
+let openList, closedList;
 let nodes, startNode, endNode, currentNode;
 let blockProbability = 0;
 let isManhattan;
@@ -25,6 +25,10 @@ document.getElementById("restart_button").onclick = reset;
 
 document.getElementById("choose_start_stop").onclick = function () {
   reset();
+  // -reset startNode and endNode
+  startNode.show("WHITESMOKE");
+  endNode.show("WHITESMOKE");
+
   alert("Click on the cell to define start(red) and end(blue) node!");
   canvas.addEventListener("click", chooseStartEnd);
 };
@@ -47,7 +51,6 @@ function reset() {
 
   openList = [];
   closedList = [];
-  solutionPath = [];
   startStopClickCount = 0;
   alreadyFound = false;
   isManhattan = document.getElementById("manhattan_distance").checked;
@@ -84,8 +87,16 @@ function reset() {
       nodes[i][j].show("WHITESMOKE");
     }
   }
+
+  // -show startNode & endNode
+  startNode.show("RED");
+  endNode.show("LIME");
+
   // -reset looping to 0
   document.getElementById("looping_count").innerHTML = 0;
+
+  // -choosing mode off
+  canvas.removeEventListener("click", chooseStartEnd);
 }
 
 // -function to draw canvas continueously
@@ -122,23 +133,32 @@ function draw() {
     // -mark the first node as already-searched node
     closedList.push(currentNode);
 
-    // -if currentNode is the goal, then trace the path to the start node
+    //  -display openList (yellow)
+    // openList.forEach((elt) => elt.show("YELLOW"));
+
+    //  -display closedList (gray)
+    closedList.forEach((elt) => elt.show("#C8C8C8"));
+
+    // -show the path from the startNode to currentNode (BLUE)
+    let currentPath = [];
+    let currentTempNode = currentNode;
+    currentPath.push(currentTempNode);
+    while (currentTempNode.parent != null) {
+      currentPath.push(currentTempNode.parent);
+      currentTempNode = currentTempNode.parent;
+    }
+    currentPath.forEach((elt) => elt.show("#0064FF"));
+
+    // -show startNode and endNode
+    startNode.show("RED");
+    endNode.show("LIME");
+
+    // -if currentNode is the goal, then stop the loop
     if (currentNode.isSame(endNode)) {
       console.log("Found.");
 
       alreadyFound = true;
-
-      let temp = currentNode;
-      solutionPath.push(temp);
-      while (temp.parent != null) {
-        solutionPath.push(temp.parent);
-        temp = temp.parent;
-      }
-      // -display solution path (green)
-      for (let i = 0; i < solutionPath.length; i++) {
-        solutionPath[i].show("GREEN");
-      }
-      console.log(solutionPath);
+      console.log(currentPath);
       return;
     }
 
@@ -169,16 +189,6 @@ function draw() {
 
         openList.push(neighbour);
       }
-    }
-
-    //  -display openList (yellow)
-    for (let i = 0; i < openList.length; i++) {
-      openList[i].show("YELLOW");
-    }
-
-    //  -display closedList (gray)
-    for (let i = 0; i < closedList.length; i++) {
-      closedList[i].show("GRAY");
     }
   } else {
     console.log("No solution.");
@@ -221,7 +231,7 @@ function chooseStartEnd(e) {
   // -choosing the end node
   if (startStopClickCount == 2) {
     endNode = nodes[gridPosX][gridPosY];
-    c.fillStyle = "BLUE";
+    c.fillStyle = "LIME";
     c.fillRect(gridPosX * gridSize, gridPosY * gridSize, gridSize, gridSize);
   }
 
